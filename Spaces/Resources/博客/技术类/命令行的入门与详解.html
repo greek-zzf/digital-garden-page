@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"><head><title>命令行的入门与详解</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="命令行的入门与详解"/><meta property="og:description" content="什么是命令行 操作系统都有内核的概念，内核是直接与硬件打交道的。我们通过包裹内核的一层壳（ shell ）来与内核打交道。 广义的命令行包括一切通过字符终端控制计算机的⽅式 Windows - cmd/PowerShell/Git bash UNIX/Linux系列：sh/zsh/Terminal, etc ..."/><meta property="og:image" content="https://zzfgarden.top/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="什么是命令行 操作系统都有内核的概念，内核是直接与硬件打交道的。我们通过包裹内核的一层壳（ shell ）来与内核打交道。 广义的命令行包括一切通过字符终端控制计算机的⽅式 Windows - cmd/PowerShell/Git bash UNIX/Linux系列：sh/zsh/Terminal, etc ..."/><meta name="generator" content="Quartz"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch("../../../../static/contentIndex.json").then(data => data.json())</script></head><body data-slug="Spaces/Resources/博客/技术类/命令行的入门与详解"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title"><a href="../../../..">🪴 渣渣丰の数字花园</a></h1><div class="spacer mobile-only"></div><div class="search"><div id="search-icon"><p>Search</p><div></div><svg tabindex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="search-layout" data-preview="true"></div></div></div></div><div class="darkmode"><input class="toggle" id="darkmode-toggle" type="checkbox" tabindex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve"><title>Dark mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve"><title>Light mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div><div class="toc desktop-only"><button type="button" id="toc" class><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#什么是命令行" data-for="什么是命令行">什么是命令行</a></li><li class="depth-0"><a href="#为什么需要命令行" data-for="为什么需要命令行">为什么需要命令行</a></li><li class="depth-0"><a href="#不同平台命令行启动方式" data-for="不同平台命令行启动方式">不同平台命令行启动方式</a></li><li class="depth-0"><a href="#命令行的全部要素" data-for="命令行的全部要素">命令行的全部要素</a></li><li class="depth-1"><a href="#可执行程序executable" data-for="可执行程序executable">可执行程序（Executable）</a></li><li class="depth-1"><a href="#参数" data-for="参数">参数</a></li><li class="depth-1"><a href="#环境变量environment-variable" data-for="环境变量environment-variable">环境变量（Environment variable）</a></li><li class="depth-1"><a href="#工作目录working-directory" data-for="工作目录working-directory">工作目录（Working directory）</a></li><li class="depth-0"><a href="#进程的输入与输出" data-for="进程的输入与输出">进程的输入与输出</a></li><li class="depth-0"><a href="#linux-文件权限" data-for="linux-文件权限">Linux 文件权限</a></li><li class="depth-0"><a href="#linux-常用命令" data-for="linux-常用命令">Linux 常用命令</a></li></ul></div></div><div class="recent-notes desktop-only"><h3>Recent writing</h3><ul class="recent-ul"><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/财富流---个人觉察" class="internal">财富流 - 个人觉察</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/提升">提升</a></li></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/肾结石的治疗经验分享" class="internal">肾结石的治疗经验分享</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/todo">todo</a></li><li><a class="internal tag-link" href="../../../../tags/肾结石">肾结石</a></li></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/肠胃镜的经验分享" class="internal">肠胃镜的经验分享</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/肠胃镜">肠胃镜</a></li></ul></div></li></ul><p><a href="../../../../tags/">See 191 more →</a></p></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title">命令行的入门与详解</h1><p show-comma="true" class="content-meta"><span>Aug 26, 2021</span><span>9 min read</span></p><ul class="tags"><li><a href="../../../../tags/命令行" class="internal tag-link">命令行</a></li></ul></div></div><article class="popover-hint"><h1 id="什么是命令行">什么是命令行<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#什么是命令行" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>操作系统都有内核的概念，内核是直接与硬件打交道的。我们通过包裹内核的一层壳（ shell ）来与内核打交道。</p>
+<p><strong>广义的命令行包括一切通过字符终端控制计算机的⽅式</strong></p>
+<ul>
+<li>Windows - cmd/PowerShell/Git bash</li>
+<li>UNIX/Linux系列：sh/zsh/Terminal, etc.</li>
+</ul>
+<h1 id="为什么需要命令行">为什么需要命令行<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#为什么需要命令行" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<ul>
+<li>因为基本所有公司的服务器都运⾏在 Linux 上 ，所以不得不用</li>
+<li>将工作自动化（暂时没有接触到的领域）</li>
+<li>相比 GUI，命令行更容易开发维护，bug 更少</li>
+<li>远程连接命令行占用资源远低于 GUI</li>
+<li>命令行上的开发者工具更丰富</li>
+</ul>
+<h1 id="不同平台命令行启动方式">不同平台命令行启动方式<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#不同平台命令行启动方式" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<ul>
+<li>Windows：cmd/PowerShell/WSL</li>
+<li>UNIX/Linux：⼀开机就是，不⽤找。Mac OS 对应的是终端。</li>
+</ul>
+<h1 id="命令行的全部要素">命令行的全部要素<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#命令行的全部要素" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p><strong>命令是由可执行程序和参数组成的。<strong>例如：git add test.txt，git 就是</strong>可执行程序</strong>，git 后面所有的都是**参数，**即 <code>add test.txt</code> 。命令行输入命令，会把参数原封不动地交给可执行程序解释。</p>
+<h2 id="可执行程序executable">可执行程序（Executable）<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#可执行程序executable" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>什么样的东西是可执行的呢？在 Windows 和 Linux / Unix有着不同的区别</p>
+<ul>
+<li>Windows：只要是 exe / bat / com 结尾的文件都是可执行文件</li>
+<li>LIunx / Unix：文件有 <strong>x 权限</strong>，表示该文件为可执行文件</li>
+</ul>
+<p><strong>可执行程序的位置</strong></p>
+<ul>
+<li>Windows：Path 环境变量或当前⽬录</li>
+<li>UNIX / Linux：PATH 环境变量</li>
+</ul>
+<p><strong>可以在脚本的第一行指定解释器（shebang）</strong>，假设 zzf.sh文件中有如下代码：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="shell" data-theme="github-light github-dark"><code data-language="shell" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">#!/usr/bin/env node</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">console.log(123</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">)</span></span></code></pre></figure>
+<p><code>#!/usr/bin/env node</code> 意思是在 PATH 环境变量找到 node 解释器位置，来解释 zzf.sh 文件。也可以使用 node.exe 文件的绝对路径。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="shell" data-theme="github-light github-dark"><code data-language="shell" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">#!/d/node</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">console.log(123</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">)</span></span></code></pre></figure>
+<p>从环境变量找解释器和使用绝对路径是等价的，但是一般都是从环境变量去找，更为灵活。</p>
+<h2 id="参数">参数<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#参数" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p><strong>UNIX 参数的约定</strong></p>
+<ul>
+<li>使用一个 ”-” 后面只能跟一个字符，例如：-a -f  等等。后面跟多个参数的话可以合并，例如：-a -f 合并成 -af</li>
+<li>使用两个 ”-” 后面可以跟一个单词，例如： <code>ls -a</code>  显示所有文件，等价于 <code>ls --all</code> </li>
+</ul>
+<p>然而，Java 并不鸟 UNIX 参数约定，例如：当我们查看当前 Java 版本，使用命令 <code>java -version</code> ，一个 ”-” 后面跟了一个单词，与 UNIX 参数约定不符</p>
+<p><strong>参数一些注意事项</strong>默认情况下 “<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">&quot;</span><span class="mord cjk_fallback">符号会进行展开。假设当前目录存在一个</span><span class="mord">‘</span><span class="mord mathnormal">main</span></span></span></span>A.class<code> 文件，并且 </code>export A=123<code> 设置环境变量 A 为123， 使用 </code>Java main<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">A</span><span class="mord">‘ </span><span class="mord cjk_fallback">运行该文件，等价于</span><span class="mord">‘</span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">amain</span><span class="mord">123‘ </span><span class="mord cjk_fallback">。即，把</span></span></span></span>A 替换成 123，如果不进行替换，就要使用单引号包裹起来，即 <code>Java 'main$A'</code> 。双引号包裹内容也会进行替换。</p>
+<p><strong>因此得出以下结论</strong></p>
+<ul>
+<li>单引号：不会对引号的内容做处理</li>
+<li>双引号：对引号里的内容替换</li>
+<li>空格：当做参数处理</li>
+</ul>
+<h2 id="环境变量environment-variable">环境变量（Environment variable）<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#环境变量environment-variable" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>进程（Process）
+<ul>
+<li>进程是计算机程序运⾏的最⼩单位</li>
+<li>独占⾃⼰的内存空间和⽂件资源</li>
+</ul>
+</li>
+<li>每个进程都和⼀组变量相绑定
+<ul>
+<li>传递不同的环境变量可以让程序表现出不同的⾏为</li>
+<li>CLASSPATH/GOPATH</li>
+</ul>
+</li>
+<li>在进程的fork过程中，环境变量可以被完全继承</li>
+<li>所有的操作系统/编程语⾔都⽀持环境变量</li>
+<li>局部和全局的环境变量
+<ul>
+<li>局部变量：只在当前环境生效</li>
+<li>全局变量：全局生效的变量</li>
+</ul>
+</li>
+</ul>
+<p>我们可以通过 export / set 设置环境变量，通过 echo 读取环境变量 。修改全局变量就需要在全部变量文件中修改，不同操作系统对应的文件不同。</p>
+<h2 id="工作目录working-directory">工作目录（Working directory）<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#工作目录working-directory" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p><strong>工作目录就是输入命令行时，所处的目录即为工作目录。绝对路径是以根目录开头的路径，相对路径是相对于当前目录的路径。</strong></p>
+<h1 id="进程的输入与输出">进程的输入与输出<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#进程的输入与输出" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>标准输⼊ stdin ，进程将从标准输入中得到输入数据。例如使用 <code>rm -rf *</code> 命令，会提示是否确认删除，当我们回复y 的时候，就时一个标准输入。</p>
+<p><strong>输出的重定向</strong>，我们可以使用 ”>” 符号来重定向输出，例如在终端输入 <code>date +&quot;%Y-%m-%d %H:%M:%S&quot; > output.txt</code> ，就是将<strong>标准输出</strong>重定向到 output.txt 文件中，若再次运行该命令，会将之前的 output.txt 文件覆盖 。使用 ”>>” 可以将标准输出追加到 output.txt 文件中。</p>
+<p><strong>标准输出 stdout</strong> 和<strong>标准错误 stderr <strong>相当于一个进程的两个管道。标准输出对应着文件描述符1，标准错误 对应着文件描述符2。假设我们要将一个</strong>进程的标准输出重定向</strong>到 output.txt 文件中，我们可以使用 <code>命令 > output.txt</code> 或者 <code> 命令 1> output.txt</code> 。同理类推，将<strong>进程的标准错误重定向到</strong> error.txt 文件，可以使用    <code>命令 2> error.txt</code> 。要让标准输出和标准错误都重定向到 output.txt 文件，使用 <code> 命令 > output.txt > 2>&amp;1</code> 。该命令代表的意思是，先将2（标准错误），重定向到1（标准输出），再把结果重定向到 outout.txt 文件。</p>
+<p><strong>/dev/null</strong> 相当于一个垃圾桶的概念，可以把标准输出或者标准输入重定向到该文件。 <code> 命令 > /dev/null</code> 即把标准输出丢到垃圾桶里，相当于黑洞一般，把标准输出给「吞」了。</p>
+<h1 id="linux-文件权限">Linux 文件权限<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#linux-文件权限" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>任何一个 UNIX 文件都有9位，分成3组，分别是自己（文件创建者），同用户组的人，不同用户组的人。每一组都有 rwx，r 代表读（read），w 代表写（write），x 代表可执行。</p>
+<p>假设有一个需求，我们要当前文件只能被当前用户读写执行。就需要把自己组的 r 设置为1，w 设置为1，x 设置为1，其他组的 rwx 都设置为0，设置完成后对应的二进制分别是 <code>111 000 000</code> ，对应的十进制就是 <code>700</code> ，因此使用 <code>chmod 700 当前文件</code> 即可赋予当前用户读写执行权限。</p>
+<p>根据上面的结论，我们需要给所有用户可读可写可执行权限，就需要把所有组的 rwx 设置为1，得到的二进制就是 <code>111 111 111</code> ，对应的十进制为 <code>777</code> ，因此 <code>chmod 777 当前文件</code> 表示为所有用户，赋予可读可写可执行权限。</p>
+<h1 id="linux-常用命令">Linux 常用命令<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#linux-常用命令" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<ul>
+<li>进⼊⽬录 cd (change directory)</li>
+<li>展示⽂件 ls/ll/ls -alth (list)</li>
+<li>移动/重命名⽂件 mv (move)</li>
+<li>删除⽂件 rm/rm -r/rm -rf (remove)</li>
+<li>拷⻉⽂件 cp/cp -r (copy)</li>
+<li>显示变量 echo</li>
+<li>导出变量 export</li>
+<li>Git系列操作 git pull/push/add/commit/…</li>
+<li>新建⽬录 mkdir/mkdir -p (make directory)</li>
+<li>当前⽬录 pwd (print working directory)</li>
+<li>显示⽂件 cat (concatenate and print files)</li>
+<li>编辑⽂件 vi</li>
+</ul></article></div><div class="right sidebar"><div class="graph"><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true}"></div></div></div><div class="backlinks"><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../Atlas/Blog-HomePage" class="internal">Blog HomePage</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.2.3</a> © 2024</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></body><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js" type="application/javascript"></script><script type="application/javascript">function c(){let t=this.parentElement;t.classList.toggle("is-collapsed");let l=t.classList.contains("is-collapsed")?this.scrollHeight:t.scrollHeight;t.style.maxHeight=l+"px";let o=t,e=t.parentElement;for(;e;){if(!e.classList.contains("callout"))return;let n=e.classList.contains("is-collapsed")?e.scrollHeight:e.scrollHeight+o.scrollHeight;e.style.maxHeight=n+"px",o=e,e=e.parentElement}}function i(){let t=document.getElementsByClassName("callout is-collapsible");for(let s of t){let l=s.firstElementChild;if(l){l.addEventListener("click",c),window.addCleanup(()=>l.removeEventListener("click",c));let e=s.classList.contains("is-collapsed")?l.scrollHeight:s.scrollHeight;s.style.maxHeight=e+"px"}}}document.addEventListener("nav",i);window.addEventListener("resize",i);
+</script><script type="module">
+          let mermaidImport = undefined
+          document.addEventListener('nav', async () => {
+            if (document.querySelector("code.mermaid")) {
+              mermaidImport ||= await import('https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs')
+              const mermaid = mermaidImport.default
+              const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+              mermaid.initialize({
+                startOnLoad: false,
+                securityLevel: 'loose',
+                theme: darkMode ? 'dark' : 'default'
+              })
+
+              await mermaid.run({
+                querySelector: '.mermaid'
+              })
+            }
+          });
+          </script><script type="application/javascript">
+            const socket = new WebSocket('ws://localhost:3001')
+            // reload(true) ensures resources like images and scripts are fetched again in firefox
+            socket.addEventListener('message', () => document.location.reload(true))
+          </script><script src="../../../../postscript.js" type="module"></script></html>

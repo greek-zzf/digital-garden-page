@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en"><head><title>Java 正则表达式</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Java 正则表达式"/><meta property="og:description" content="描述 定义：用于描述文本/字符串的一组规则 作用：使用一些自定义的规则来批量处理文本，提取信息 优点：使用很少的代码完成复杂的文本提取工作，提高工作效率 缺点：难学，难懂。在 java 对于正则表达式的支持不太友好，频繁使用会有性能问题。 常见规则 元字符 ^开始位置$结束位置.单个任意字符\w单个”word”字符 字母/数字/下划线/汉字\s单个空白字符\d单个数字字符\b单词的开始或结束 ..."/><meta property="og:image" content="https://zzfgarden.top/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="描述 定义：用于描述文本/字符串的一组规则 作用：使用一些自定义的规则来批量处理文本，提取信息 优点：使用很少的代码完成复杂的文本提取工作，提高工作效率 缺点：难学，难懂。在 java 对于正则表达式的支持不太友好，频繁使用会有性能问题。 常见规则 元字符 ^开始位置$结束位置.单个任意字符\w单个”word”字符 字母/数字/下划线/汉字\s单个空白字符\d单个数字字符\b单词的开始或结束 ..."/><meta name="generator" content="Quartz"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch("../../../../static/contentIndex.json").then(data => data.json())</script></head><body data-slug="Spaces/Resources/博客/技术类/Java-正则表达式"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title"><a href="../../../..">🪴 渣渣丰の数字花园</a></h1><div class="spacer mobile-only"></div><div class="search"><div id="search-icon"><p>Search</p><div></div><svg tabindex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="search-layout" data-preview="true"></div></div></div></div><div class="darkmode"><input class="toggle" id="darkmode-toggle" type="checkbox" tabindex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve"><title>Dark mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve"><title>Light mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div><div class="toc desktop-only"><button type="button" id="toc" class><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#描述" data-for="描述">描述</a></li><li class="depth-0"><a href="#常见规则" data-for="常见规则">常见规则</a></li><li class="depth-0"><a href="#java-世界中的正则表达式" data-for="java-世界中的正则表达式">Java 世界中的正则表达式</a></li><li class="depth-0"><a href="#分组与捕获" data-for="分组与捕获">分组与捕获</a></li><li class="depth-1"><a href="#java-中捕获数据" data-for="java-中捕获数据">Java 中捕获数据</a></li></ul></div></div><div class="recent-notes desktop-only"><h3>Recent writing</h3><ul class="recent-ul"><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/财富流---个人觉察" class="internal">财富流 - 个人觉察</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/提升">提升</a></li></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/肾结石的治疗经验分享" class="internal">肾结石的治疗经验分享</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/todo">todo</a></li><li><a class="internal tag-link" href="../../../../tags/肾结石">肾结石</a></li></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/肠胃镜的经验分享" class="internal">肠胃镜的经验分享</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/肠胃镜">肠胃镜</a></li></ul></div></li></ul><p><a href="../../../../tags/">See 191 more →</a></p></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title">Java 正则表达式</h1><p show-comma="true" class="content-meta"><span>Apr 17, 2021</span><span>5 min read</span></p><ul class="tags"><li><a href="../../../../tags/正则表达式" class="internal tag-link">正则表达式</a></li></ul></div></div><article class="popover-hint"><h2 id="描述">描述<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#描述" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p><strong>定义</strong>：用于描述文本/字符串的一组规则</p>
+<p><strong>作用</strong>：使用一些自定义的规则来批量处理文本，提取信息</p>
+<p><strong>优点</strong>：使用很少的代码完成复杂的文本提取工作，提高工作效率</p>
+<p><strong>缺点</strong>：难学，难懂。在 java 对于正则表达式的支持不太友好，频繁使用会有性能问题。</p>
+<h2 id="常见规则">常见规则<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#常见规则" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p><strong>元字符</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>^</th><th>开始位置</th></tr></thead><tbody><tr><td>$</td><td>结束位置</td></tr><tr><td>.</td><td>单个任意字符</td></tr><tr><td>\w</td><td>单个”word”字符 字母/数字/下划线/汉字</td></tr><tr><td>\s</td><td>单个空白字符</td></tr><tr><td>\d</td><td>单个数字字符</td></tr><tr><td>\b</td><td>单词的开始或结束</td></tr></tbody></table></div>
+<p><strong>重复</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>*</th><th>0次或多次</th></tr></thead><tbody><tr><td>+</td><td>1次或多次</td></tr><tr><td>?</td><td>0次或1次</td></tr><tr><td>{n}</td><td>n次</td></tr><tr><td>{n,}</td><td>>=n次</td></tr><tr><td>{n,m}</td><td>n到m次</td></tr></tbody></table></div>
+<p><strong>选择</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>[aeiou]</th><th>单个的a/e/i/o/u字符之一</th></tr></thead><tbody><tr><td>[0-9]</td><td>单个数字字符</td></tr><tr><td>[A-Z]</td><td>单个大写字母</td></tr><tr><td>[A-Z0-9_]</td><td>大写字母或者数字或者下划线</td></tr><tr><td>Hi|hi等价于[Hh]i</td><td>Hi或者hi</td></tr></tbody></table></div>
+<h2 id="java-世界中的正则表达式">Java 世界中的正则表达式<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#java-世界中的正则表达式" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Java 中的正则表达式是比较「昂贵」的</p>
+<ul>
+<li>正则表达式需要解析
+<ul>
+<li>Java 需要将正则表达式字符串，转换成自己内部的数据结构，这个转换过程代价较大</li>
+<li>在写代码中可以将正则表达式预编译好，需要的时候再调用就行了，减少了多次编译的开销。例：</li>
+</ul>
+</li>
+</ul>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="java" data-theme="github-light github-dark"><code data-language="java" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> Pattern phoneNumber </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> Pattern.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">compile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;0</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">d{2}-[1-9]</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">d{7}|0</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">d{3}-[1-9]</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">d{6}&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">);</span></span></code></pre></figure>
+<ul>
+<li>匹配过程非常「昂贵」
+<ul>
+<li>Java 的匹配算法并不高效，用到的是<a href="https://www.google.com/search?q=%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95&amp;oq=%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95&amp;aqs=chrome..69i57j0l9.2220j0j4&amp;sourceid=chrome&amp;ie=UTF-8" class="external">回溯算法<svg class="external-icon" viewBox="0 0 512 512"><path d="M320 0H288V64h32 82.7L201.4 265.4 178.7 288 224 333.3l22.6-22.6L448 109.3V192v32h64V192 32 0H480 320zM32 32H0V64 480v32H32 456h32V480 352 320H424v32 96H64V96h96 32V32H160 32z"></path></svg></a>。就像机器人走迷宫一般，一直尝试，遇到墙就换一条路线继续试，直到走出迷宫</li>
+</ul>
+</li>
+</ul>
+<p>Java 中使用到正则表达式的方法：String 类中的 split，replaceAll，replacefirst，matches，以及 Matches 中的方法。可以查看相关的 demo 链接：<a href="https://github.com/greek-zzf/my-demo/blob/main/example/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/%E6%99%AE%E9%80%9A%E7%BB%83%E4%B9%A0/PhoneNumberMatcher.java" class="external">判断是不是合法的固定电话号码<svg class="external-icon" viewBox="0 0 512 512"><path d="M320 0H288V64h32 82.7L201.4 265.4 178.7 288 224 333.3l22.6-22.6L448 109.3V192v32h64V192 32 0H480 320zM32 32H0V64 480v32H32 456h32V480 352 320H424v32 96H64V96h96 32V32H160 32z"></path></svg></a>，<a href="https://github.com/greek-zzf/my-demo/blob/main/example/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/%E6%99%AE%E9%80%9A%E7%BB%83%E4%B9%A0/LogProcessor.java" class="external">移除文件中的时间戳<svg class="external-icon" viewBox="0 0 512 512"><path d="M320 0H288V64h32 82.7L201.4 265.4 178.7 288 224 333.3l22.6-22.6L448 109.3V192v32h64V192 32 0H480 320zM32 32H0V64 480v32H32 456h32V480 352 320H424v32 96H64V96h96 32V32H160 32z"></path></svg></a></p>
+<h2 id="分组与捕获">分组与捕获<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#分组与捕获" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>前面的正则表达式用法，都是用来判断字符串是否满足条件。然而，实际工作中用到较多的都是从一堆字符串中提取所需的信息，那么 Java 又是怎么做的呢？</p>
+<p>想要将所有符合正则表达式的⽂本抓出来处理，需要先了解如下规则：</p>
+<ul>
+<li>使⽤括号来指定⼀个被捕获的分组</li>
+<li>分组的编号从1开始</li>
+<li>分组的编号计算只看左括号</li>
+<li>(?:)不捕获和分配编号，括号只⽤于分组或标记优先</li>
+<li>分组编号为0表示整个匹配的字符串</li>
+</ul>
+<h3 id="java-中捕获数据">Java 中捕获数据<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#java-中捕获数据" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>在 Java 中可以使用 <code>Pattern 类的 matcher() 方法生成 Matcher 对象</code> ，然后我们可以对 <code>Matcher对象进行操作</code>。</p>
+<p>假设有如下数据，我们需要将时间以及消费金额提取出来。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="log" data-theme="github-light github-dark"><code data-language="log" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>2020-01-02 在家玩游戏消费0元</span></span>
+<span data-line><span>2020-01-03 在家敲代码消费3元</span></span>
+<span data-line><span>2020-02-02 出门旅游消费1000元</span></span></code></pre></figure>
+<p>我们可以先将该数据读取出来，保存成一个 List</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="java" data-theme="github-light github-dark"><code data-language="java" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">File gcLog </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> File</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;message.log&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">);</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">List&lt;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">> lines </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> Files.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">readAllLines</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(gcLog.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">toPath</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">());</span></span></code></pre></figure>
+<p>然后我们可以在类中声明 Pattern，把对匹配时间和事件的正则表达式预编译。经过在线正则表达式测试，我们可以编写如下正则 <code>\d{4}-\d{2}-\d{2}(.*)?\d</code> 这个可以匹配时间和金额。我们要提取，就需要给时间部分加上括号，金额部分也加上括号。正则表达式变成 <code>(\d{4}-\d{2}-\d{2})(.*)?(\d)</code>。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="java" data-theme="github-light github-dark"><code data-language="java" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> String MESSAGE_REGEX </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> &quot;(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">\d</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">{4}-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">\d</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">{2}-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">\d</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">{2})(.*)?(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">\d</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">)&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">;</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> Pattern pattern </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> Pattern.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">compile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(MESSAGE_REGEX);</span></span></code></pre></figure>
+<p>接着对所有字符串进行匹配，匹配过程中会生成 Matcher。调用 Matcher 的 find 方法，判断是否匹配成功。因为分组编号为 0 代表匹配的全部信息，即日期+金额，group(1) 代表匹配的第一组信息，即时间，group(2）就代表金额。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="java" data-theme="github-light github-dark"><code data-language="java" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">  for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (String line </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> lines) {</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">            Matcher matcher </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> pattern.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">matcher</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(line);</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">            if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(matcher.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">find</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">()){</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(matcher.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">group</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">));</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(matcher.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">group</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">));</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(matcher.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">group</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">));</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">            }</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        }</span></span></code></pre></figure>
+<p>一个更为复杂的 GC 日志文件信息提取操作可查看 <a href="https://github.com/greek-zzf/my-demo/blob/main/example/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/%E5%88%86%E7%BB%84%E4%B8%8E%E6%8D%95%E8%8E%B7/GCLogAnalyzer.java" class="external">Demo<svg class="external-icon" viewBox="0 0 512 512"><path d="M320 0H288V64h32 82.7L201.4 265.4 178.7 288 224 333.3l22.6-22.6L448 109.3V192v32h64V192 32 0H480 320zM32 32H0V64 480v32H32 456h32V480 352 320H424v32 96H64V96h96 32V32H160 32z"></path></svg></a></p></article></div><div class="right sidebar"><div class="graph"><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true}"></div></div></div><div class="backlinks"><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../Atlas/Blog-HomePage" class="internal">Blog HomePage</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.2.3</a> © 2024</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></body><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js" type="application/javascript"></script><script type="application/javascript">function c(){let t=this.parentElement;t.classList.toggle("is-collapsed");let l=t.classList.contains("is-collapsed")?this.scrollHeight:t.scrollHeight;t.style.maxHeight=l+"px";let o=t,e=t.parentElement;for(;e;){if(!e.classList.contains("callout"))return;let n=e.classList.contains("is-collapsed")?e.scrollHeight:e.scrollHeight+o.scrollHeight;e.style.maxHeight=n+"px",o=e,e=e.parentElement}}function i(){let t=document.getElementsByClassName("callout is-collapsible");for(let s of t){let l=s.firstElementChild;if(l){l.addEventListener("click",c),window.addCleanup(()=>l.removeEventListener("click",c));let e=s.classList.contains("is-collapsed")?l.scrollHeight:s.scrollHeight;s.style.maxHeight=e+"px"}}}document.addEventListener("nav",i);window.addEventListener("resize",i);
+</script><script type="module">
+          let mermaidImport = undefined
+          document.addEventListener('nav', async () => {
+            if (document.querySelector("code.mermaid")) {
+              mermaidImport ||= await import('https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs')
+              const mermaid = mermaidImport.default
+              const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+              mermaid.initialize({
+                startOnLoad: false,
+                securityLevel: 'loose',
+                theme: darkMode ? 'dark' : 'default'
+              })
+
+              await mermaid.run({
+                querySelector: '.mermaid'
+              })
+            }
+          });
+          </script><script type="application/javascript">
+            const socket = new WebSocket('ws://localhost:3001')
+            // reload(true) ensures resources like images and scripts are fetched again in firefox
+            socket.addEventListener('message', () => document.location.reload(true))
+          </script><script src="../../../../postscript.js" type="module"></script></html>

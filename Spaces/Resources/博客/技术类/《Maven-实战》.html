@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en"><head><title>《Maven 实战》笔记</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="《Maven 实战》笔记"/><meta property="og:description" content="当项目需要被其他项目引用时，使用 mvn clean install 安装到本地仓库，其他项目就可以引用该项目。 我们打包的默认 jar 包不能直接运行的，因为带有 main 方法的信息类不会添加到 mainfest 中（ jar 文件中 META-INF/MANIFEST.MF 文件，没有 Main-Class一行）。为了生成可执行的 ..."/><meta property="og:image" content="https://zzfgarden.top/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="当项目需要被其他项目引用时，使用 mvn clean install 安装到本地仓库，其他项目就可以引用该项目。 我们打包的默认 jar 包不能直接运行的，因为带有 main 方法的信息类不会添加到 mainfest 中（ jar 文件中 META-INF/MANIFEST.MF 文件，没有 Main-Class一行）。为了生成可执行的 ..."/><meta name="generator" content="Quartz"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch("../../../../static/contentIndex.json").then(data => data.json())</script></head><body data-slug="Spaces/Resources/博客/技术类/《Maven-实战》"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title"><a href="../../../..">🪴 渣渣丰の数字花园</a></h1><div class="spacer mobile-only"></div><div class="search"><div id="search-icon"><p>Search</p><div></div><svg tabindex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="search-layout" data-preview="true"></div></div></div></div><div class="darkmode"><input class="toggle" id="darkmode-toggle" type="checkbox" tabindex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve"><title>Dark mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve"><title>Light mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div><div class="toc desktop-only"><button type="button" id="toc" class><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#使用-maven-命令快速创建一个-maven-项目" data-for="使用-maven-命令快速创建一个-maven-项目">使用 Maven 命令快速创建一个 maven 项目</a></li><li class="depth-0"><a href="#坐标" data-for="坐标">坐标</a></li><li class="depth-0"><a href="#依赖的配置" data-for="依赖的配置">依赖的配置</a></li><li class="depth-0"><a href="#依赖的范围" data-for="依赖的范围">依赖的范围</a></li><li class="depth-0"><a href="#传递性依赖和依赖范围" data-for="传递性依赖和依赖范围">传递性依赖和依赖范围</a></li><li class="depth-0"><a href="#可选依赖" data-for="可选依赖">可选依赖</a></li><li class="depth-0"><a href="#远程仓库认证" data-for="远程仓库认证">远程仓库认证</a></li><li class="depth-0"><a href="#部署至远程仓库" data-for="部署至远程仓库">部署至远程仓库</a></li><li class="depth-0"><a href="#镜像" data-for="镜像">镜像</a></li><li class="depth-0"><a href="#生命周期" data-for="生命周期">生命周期</a></li><li class="depth-1"><a href="#clean-生命周期阶段" data-for="clean-生命周期阶段">clean 生命周期阶段</a></li><li class="depth-1"><a href="#default-生命周期阶段主要" data-for="default-生命周期阶段主要">default 生命周期阶段（主要）</a></li><li class="depth-1"><a href="#site-生命周期阶段" data-for="site-生命周期阶段">site 生命周期阶段</a></li><li class="depth-1"><a href="#命令行与生命周期" data-for="命令行与生命周期">命令行与生命周期</a></li><li class="depth-0"><a href="#插件目标和插件绑定" data-for="插件目标和插件绑定">插件目标和插件绑定</a></li><li class="depth-1"><a href="#插件目标" data-for="插件目标">插件目标</a></li><li class="depth-1"><a href="#插件绑定" data-for="插件绑定">插件绑定</a></li><li class="depth-0"><a href="#插件配置" data-for="插件配置">插件配置</a></li><li class="depth-1"><a href="#命令行插件配置" data-for="命令行插件配置">命令行插件配置</a></li><li class="depth-1"><a href="#pom-插件配置" data-for="pom-插件配置">POM 插件配置</a></li><li class="depth-0"><a href="#聚合与继承" data-for="聚合与继承">聚合与继承</a></li><li class="depth-1"><a href="#聚合" data-for="聚合">聚合</a></li><li class="depth-1"><a href="#继承" data-for="继承">继承</a></li><li class="depth-1"><a href="#继承和聚合关系" data-for="继承和聚合关系">继承和聚合关系</a></li><li class="depth-0"><a href="#约定优于配置" data-for="约定优于配置">约定优于配置</a></li><li class="depth-0"><a href="#反应堆" data-for="反应堆">反应堆</a></li></ul></div></div><div class="recent-notes desktop-only"><h3>Recent writing</h3><ul class="recent-ul"><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/财富流---个人觉察" class="internal">财富流 - 个人觉察</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/提升">提升</a></li></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/肾结石的治疗经验分享" class="internal">肾结石的治疗经验分享</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/todo">todo</a></li><li><a class="internal tag-link" href="../../../../tags/肾结石">肾结石</a></li></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../Spaces/Resources/博客/生活类/肠胃镜的经验分享" class="internal">肠胃镜的经验分享</a></h3></div><p class="meta">Apr 01, 2024</p><ul class="tags"><li><a class="internal tag-link" href="../../../../tags/肠胃镜">肠胃镜</a></li></ul></div></li></ul><p><a href="../../../../tags/">See 191 more →</a></p></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title">《Maven 实战》笔记</h1><p show-comma="true" class="content-meta"><span>Aug 20, 2021</span><span>28 min read</span></p><ul class="tags"><li><a href="../../../../tags/Maven" class="internal tag-link">Maven</a></li></ul></div></div><article class="popover-hint"><p>当项目需要被其他项目引用时，使用 <code>mvn clean install</code> 安装到本地仓库，其他项目就可以引用该项目。</p>
+<p>我们打包的默认 jar 包不能直接运行的，因为带有 main 方法的信息类不会添加到 mainfest 中（ jar 文件中 META-INF/MANIFEST.MF 文件，没有 <code>Main-Class</code>一行）。为了生成可执行的 jar 文件，需要借助 <code>maven-shade-plugin</code>，配置该插件。</p>
+<h2 id="使用-maven-命令快速创建一个-maven-项目">使用 Maven 命令快速创建一个 maven 项目<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#使用-maven-命令快速创建一个-maven-项目" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>使用命令 <code>mvn archetype:generate</code> 根据提示选择需要的骨架，输入 groupId，artifactId，version 等信息，创建项目。需要注意的是：maven2 中使用上面的命令，会去下载最新的版本，而不是稳定的版本，可能导致运行失败。maven3 则默认是下载稳定的版本。</p>
+<h2 id="坐标">坐标<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#坐标" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>**groupId：命名通常为域名反向一一对应。**比如 <code>google.com</code> 可以命名为 <code>com.google</code>。</li>
+<li><strong>artifactId：<strong>命名推荐的做法是</strong>使用实际的项目名称作为 artifactId 的前缀</strong>。比如项目名是 <code>demo</code>，下面有个 <code>hello</code> 模块，就可以命名为 <code>demo-hello</code>。</li>
+<li>**version：**定义当前项目的版本信息。</li>
+<li><strong>packaging：定义元素打包方式，打包方式通常与所生成的构件文件扩展名对应</strong>。例如指定为 <code>jar</code> 则构件的文件扩展名为 .jar，war 也如此。<strong>不定义 packaging 时，默认打包为 jar</strong>。打包方式会影响到构建的生命周期，比如 jar 和 war 打包会使用不同的命令。</li>
+<li><strong>classifier：定义构建输出的一些附属构建。例如项目打包生成 demo.jar 文件，打包过程中可能还需要 javadoc 文件，就可以配置对应的插件来生成 javadoc 文件。</strong></li>
+</ul>
+<h2 id="依赖的配置">依赖的配置<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#依赖的配置" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li><strong>type：</strong> 依赖的类型，对应于项目坐标定义的 packaging。大部分情况下，该元素不必声明，默认为 jar。</li>
+<li><strong>scope：</strong> 依赖的作用范围。</li>
+<li><strong>optional：</strong> 标记依赖是否可选。</li>
+<li><strong>exclusions：</strong> 用来排除传递性依赖。</li>
+</ul>
+<h2 id="依赖的范围">依赖的范围<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#依赖的范围" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>前置知识：Maven 编译项目主代码的时候使用一套 classpath，在编译执行测试的时候使用另一套 classpath，而实际运行 Maven 项目时候又会使用一套 classpath，因此总共有三套 classpath。</p>
+<p><strong>依赖范围就是来控制与这三种 classath（编译 classpath，测试 classpath，运行 classpath）的关系</strong>。如果没有指定依赖范围，就会默认使用 <code>compile</code>依赖范围。</p>
+<p><strong>依赖范围与 classpath 关系</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th><strong>依赖范围</strong> <strong>（Scope）</strong></th><th><strong>对于编译 classpath 有效</strong></th><th><strong>对于测试 classpath有效</strong></th><th><strong>对于运行时 classpath 有效</strong></th><th><strong>例子</strong></th></tr></thead><tbody><tr><td>compile</td><td>Y</td><td>Y</td><td>Y</td><td>spring-core</td></tr><tr><td>test</td><td>—</td><td>Y</td><td>—</td><td>JUnit</td></tr><tr><td>provided</td><td>Y</td><td>Y</td><td>—</td><td>servlet-api</td></tr><tr><td>runtime</td><td>—</td><td>Y</td><td>Y</td><td>JDBC 驱动实现</td></tr><tr><td>system</td><td>Y</td><td>Y</td><td>—</td><td>本地的 maven 仓库外的类库文件</td></tr></tbody></table></div>
+<h2 id="传递性依赖和依赖范围">传递性依赖和依赖范围<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#传递性依赖和依赖范围" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>传递性依赖：A <span>⇒</span> B <span>⇒</span> C，假设 A 依赖 B，B 依赖 C。称 A 对于 B 是<strong>第一直接依赖，<strong>B 对于 C 是</strong>第二直接依赖，<strong>A 对于 C 是</strong>传递性依赖。</strong></p>
+<p>上面说了依赖范围不仅与三种 classpath 有关系，还对传递性依赖产生影响。如下表格所示，最左边的一行表示第一依赖范围，最上面一行表示第二直接依赖范围。</p>
+<p><strong>依赖范围影响传递性依赖</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th></th><th>compile</th><th>test</th><th>provided</th><th>runtime</th></tr></thead><tbody><tr><td>compile</td><td>compile</td><td>—</td><td>—</td><td>runtime</td></tr><tr><td>test</td><td>test</td><td>—</td><td>—</td><td>test</td></tr><tr><td>provided</td><td>provided</td><td>—</td><td>provided</td><td>provided</td></tr><tr><td>runtime</td><td>runtime</td><td>—</td><td>—</td><td>runtime</td></tr></tbody></table></div>
+<p>助记规律：</p>
+<ul>
+<li>当第二直接依赖范围是 <code>compile</code> 时，传递性依赖范围与第一直接依赖范围一致。</li>
+<li>当第二直接依赖范围是 <code>test</code> 时，依赖不会得以传递。</li>
+<li>当第二直接依赖范围是 <code>provided</code> 时，只传递第一依赖范围也为 <code>provided</code>的依赖。</li>
+<li>当第二直接依赖范围是 <code>runtime</code> 时，传递性依赖范围与第一直接依赖范围一致，但 <code>compile</code> 除外，此时传递性依赖范围为 <code>runtime</code>。</li>
+</ul>
+<p><strong>依赖调节</strong></p>
+<p>就近原则：A <span>⇒</span> B <span>⇒</span> C(1.0），A <span>⇒</span> B <span>⇒</span> D <span>⇒</span> C(2.0)，前者的路径长度为2，后者为3，因此 C(1.0) 被解析使用。</p>
+<p>先声明先使用：遇到长度一样的，无法使用就近原则，就根据声明顺序，先声明的先解析使用。</p>
+<h2 id="可选依赖">可选依赖<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#可选依赖" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>假设 A 依赖 B，B 依赖 X 和 Y，B 对于 X 和 Y 的依赖是可选依赖。A <span>⇒</span> B，B <span>⇒</span> X（可选），B <span>⇒</span> Y（可选），可选依赖不会得到传递，换句话说选择 X 或者 Y，对于 A 都不会有任何影响。</p>
+<p>可选依赖在 <code>dependency</code>标签中需要添加 <code>&lt;optional>true&lt;/optional></code>用来标记为可选依赖，因此 B 需要添加 X 和 Y 的依赖，并且分别在 <code>dependency</code>标签加上 <code>&lt;optional>true&lt;/optional></code>。</p>
+<p>当需要指定所使用的依赖时，需要在外层声明需要使用的依赖，上面的例子就需要在 A 中引入 X 或者 Y 的依赖。在理想的情况下，尽量避免可选依赖的使用。</p>
+<h2 id="远程仓库认证">远程仓库认证<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#远程仓库认证" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>当我们使用 <code>&lt;repository>&lt;/repository></code> 配置好一个远程仓库后，大部分情况下无需认证就可以直接访问，但是处于安全考虑，我们需要提供一些认证信息才能访问。此时，我们就需要配置认证信息，一般在 <code>setting.xml</code> 文件中配置，如下：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">setting</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  ...</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>remoteRepository&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">username</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>admin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">username</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">password</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>admin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">password</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  ...</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">setting</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>文件中配置了认证信息，账号密码都是 <code>admin</code>，需要注意的是 <strong>id 的值要与配置的远程仓库的 id 一致。</strong></p>
+<h2 id="部署至远程仓库">部署至远程仓库<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#部署至远程仓库" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>编写项目的 <code>pom.xml</code> 文件，配置 distributionManagement 元素，代码如下：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">project</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  ...</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">distributionManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">repository</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">url</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">url</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">repository</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    </span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">snapshotRepository</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">url</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">url</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">snapshotRepository</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">distributionManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  ...</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">project</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>其中 distributionManagement 包含两个子元素，前者表示<strong>发布版本</strong>构件的仓库，后者表示<strong>快照版本</strong>的仓库。两个元素都需要配置 id，name，url，id 为远程仓库的唯一标识，name 为了方便阅读（取名），url 远程仓库地址。</p>
+<p>发布到远程仓库的时候，往往需要认证，认证步骤与<a href="#G7puJ" class="internal alias">远程仓库认证</a>一致。之后使用命令 <code>mvn clean deploy</code> maven 就会把项目构建输出到对应的远程仓库。</p>
+<h2 id="镜像">镜像<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#镜像" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>**如果仓库 X 可以提供仓库 Y 存储的所有内容，那么就可以认为 X 是 Y 的一个镜像。**换句话说，任何一个从 Y 仓库获取的构件，都可以从它的镜像中获取。由于地理原因，国内访问 maven 中央仓库很慢，因此就需要配置一个镜像，通常使用阿里云的镜像居多。配置文件如下：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">mirror</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>aliyunmaven&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">mirrorOf</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>central&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">mirrorOf</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>阿里云公共仓库&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">url</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>https://maven.aliyun.com/repository/public&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">url</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">mirror</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>改配置文件中 <code>&lt;mirrOf></code> 的值为 central，表示任何访问该仓库的请求都会转到这个镜像中。如果镜像需要认证，也可以基于这个 <code>&lt;id></code> aliyunmaven，配置仓库认证。</p>
+<p>Maven 的 <code>&lt;mirrOf></code> 标签还支持一些更<strong>高级的配置</strong>：</p>
+<ul>
+<li><code>&lt;mirrorOf>*&lt;/mirrorOf></code>匹配所有远程仓库</li>
+<li><code>&lt;mirrorOf>external: *&lt;/mirrorOf></code>匹配所有不在本机上的远程仓库**。**</li>
+<li><code>&lt;mirrorOf>repo1,repo2&lt;/mirrorOf></code>匹配仓库 rpeo1，repo2，使用逗号分隔多个远程仓库。</li>
+<li><code>&lt;mirrorOf>*,！repo1&lt;/mirrorOf></code>匹配所有远程仓库，repo1除外。</li>
+</ul>
+<h2 id="生命周期">生命周期<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#生命周期" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>maven 的生命周期其实就是软件从初始化到发布上线经历的一系列过程。maven 将这个过程抽象化了，每个周期所执行的操作都是交给插件完成。</p>
+<p>maven 拥有三套相互独立的生命周期，分别是 **clean，default，site。**clean 负责清理项目，default 负责构建项目，site 负责建立项目站点。</p>
+<p>每个生命周期都包含一些阶段（phase），这些阶段都是有顺序的，并且后面的阶段依赖于前面的阶段。比如 clean 生命周期包含: <code>pre-clean</code>，<code>clean</code>，<code>post-clean</code> 阶段，当用户调用 pre-clean，只有 pre-clean 阶段会执行，当调用 post-clean 时，pre-clean，clean，post-clean 都会执行。<strong>由于三个生命周期互不影响，当调用某个生命周期的某个阶段时，对其他的生命周期没有任何影响。</strong></p>
+<h3 id="clean-生命周期阶段">clean 生命周期阶段<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#clean-生命周期阶段" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>pre-clean 执行清理前需要完成的工作</li>
+<li>clean 清理上一次构建生成的文件</li>
+<li>post-clean 执行清理后需要完成的工作</li>
+</ul>
+<h3 id="default-生命周期阶段主要">default 生命周期阶段（主要）<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#default-生命周期阶段主要" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>validate 验证项目是否正确并且所有必要的信息都可用</li>
+<li>compile 编译项目的源代码</li>
+<li>test 使用合适的单元测试框架测试编译的源代码。这些测试不应该要求打包或部署代码</li>
+<li>package 将编译后的代码打包成可分发的格式，例如 JAR。</li>
+<li>verify 对集成测试的结果进行任何检查，以确保满足质量标准</li>
+<li>install 将包安装到本地存储库中，作为本地其他项目的依赖项</li>
+<li>deploy 在构建环境中完成，将最终包复制到远程存储库以与其他开发人员和项目共享。</li>
+</ul>
+<h3 id="site-生命周期阶段">site 生命周期阶段<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#site-生命周期阶段" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>pre-site 执行生成项目站点前需要完成的工作</li>
+<li>site 生成项目站点文档</li>
+<li>post-site 执行生成项目站点后需要完成的工作</li>
+<li>site-deploy 将生成的项目站点发布到服务器上</li>
+</ul>
+<h3 id="命令行与生命周期">命令行与生命周期<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#命令行与生命周期" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>一些常见的 Maven 命令，解释其执行生命周期：</p>
+<ul>
+<li><code>mvn clean</code> 调用 clean 生命周期的 clean 阶段，即执行 <code>pre-clean</code> 和 <code>clean</code>阶段。</li>
+<li><code>mvn test</code> 调用 default 生命周期的 test 阶段，即执行 <code>validate</code>、<code>compile</code>、<code>test</code> 阶段。</li>
+<li><code>mvn clean install</code> 调用 clean 生命周期的 clean 阶段，以及 default 生命周期的 install 阶段。即执行 <code>pre-clean</code>和 <code>clean</code>阶段，以及 <code>validate</code>到 <code>install</code>的所有阶段。</li>
+<li><code>mvn clean deploy site-deploy</code> 调用 clean 生命周期的 clean 阶段，default 生命周期的 deploy 阶段，以及 site 生命周期的 site-deploy 阶段，实际执行过程按照上面类推。</li>
+</ul>
+<h2 id="插件目标和插件绑定">插件目标和插件绑定<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#插件目标和插件绑定" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="插件目标">插件目标<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#插件目标" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>一个插件往往能执行多个任务，因此插件具有多个功能，插件的每个功能就是一个<strong>插件目标 (goal)</strong>。</p>
+<p><code>maven-dependency-plugin</code>就有十多个目标，每个目标对应一个功能。例如：<code>dependency:list</code>、<code>dependency:tree</code>分别是不同的功能，这是一种通用的写法，冒号前面是插件前缀，冒号后面是该插件的目标。类似的，<code>compiler:compile</code>（这是 maven-compiler-plugin 的 compile 目标）和 surefire:test（这是 maven-surefire-plugin 的 test 目标）。</p>
+<h3 id="插件绑定">插件绑定<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#插件绑定" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>maven 的生命周期与插件相互绑定，具体而言就是生命周期的阶段与插件的目标相互绑定。例如 <code>mvn compile</code>就是 default 生命周期 compile 阶段与 <code>maven-compiler-plugin</code> 插件的 <code>compile</code>目标绑定。</p>
+<p><strong>内置绑定</strong></p>
+<p>为了简化配置，maven 为一些核心的生命周期阶段绑定了很多插件的目标。当用户调用对于的生命周期阶段时，绑定的插件目标就会执行相应的任务。</p>
+<p>例如：clean 生命周期的 clean 阶段，就绑定了 <code>maven-clean-plugin</code>插件的 <code>clean</code> 目标绑定。site 生命周期的 site 阶段绑定 <code>maven-site-plugin</code> 插件的 <code>site</code> 目标，site-deploy 阶段绑定到 <code>maven-site-pugin</code>插件的 <code>deploy</code>目标。</p>
+<p>由于项目的打包类型会影响构建的具体过程，因此 default 的生命周期阶段与插件的目标绑定关系与打包类型有关系。</p>
+<p>default 生命周期的内置插件绑定关系（打包类型为 jar）</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>生命周期阶段</th><th>插件目标</th><th>执行任务</th></tr></thead><tbody><tr><td>process-resources</td><td>maven-resources-plugin:resources</td><td>复制主资源文件至输出目录</td></tr><tr><td>compile</td><td>maven-compiler-plugin:compile</td><td>编译主代码至输出目录</td></tr><tr><td>process-test-resources</td><td>maven-resources-plugin:testResources</td><td>复制测试资源文件至测试输出目录</td></tr><tr><td>test-compile</td><td>maven-compiler-plugin:testCompile</td><td>编译测试代码至测试输出目录</td></tr><tr><td>test</td><td>maven-surefire-plugin:test</td><td>执行测试用例</td></tr><tr><td>package</td><td>maven-jar-plugin:jar</td><td>创建项目 jar 包</td></tr><tr><td>install</td><td>maven-install-plugin:install</td><td>将项目构建输出到本地仓库</td></tr><tr><td>deploy</td><td>maven-deploy-plugin:deploy</td><td>将项目构建输出到远程仓库</td></tr></tbody></table></div>
+<p>上面只是列举了 default 生命周期绑定了插件的阶段，并非 default 的所有阶段。</p>
+<p><strong>自定义绑定</strong></p>
+<p>除了上面的内置绑定外，插件还支持自定义绑定，拿 <code>maven-compiler-plugin</code>插件举例</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line> </span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugins</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">            &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>org.apache.maven.plugins&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>maven-compiler-plugin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>3.1&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">               	 &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">executions</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">execution</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>diy-compile&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">phase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>verify&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">phase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goals</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                            &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>testCompile&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goals</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">execution</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">executions</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">            &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugins</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line> </span></code></pre></figure>
+<p>上面代码将 <code>maven-compiler-plugin</code>插件的 <code>testCompile</code>目标绑定到 default 上面周期的 verify 阶段。当运行 mvn verify 时，该插件的 testCompile 目标就会执行。phase 表示绑定的声明周期阶段，因为插件可以在一个生命周期阶段运行多个方法，所以可以配置多个目标，即多个 goal。</p>
+<p>有的时候，没有使用 phase，插件目标目标也能绑定到声明周期的阶段中去。这是因为很多插件在目标的编写时候已经定义好了默认绑定的阶段。可以使用命令查看 <code>mvn help:describe -Dplugin=compiler  -Ddetail</code> 查看插件的详细信息，默认绑定的阶段等。</p>
+<p><strong>当一个阶段有多个插件目标绑定时，执行顺序与插件的声明顺序有关，先声明先执行</strong>。</p>
+<h2 id="插件配置">插件配置<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#插件配置" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>插件目标像 Java 中的函数一样，执行相应的功能，并且还有参数，这些参数的具体值，我们可以配置，传递给插件目标。</p>
+<h3 id="命令行插件配置">命令行插件配置<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#命令行插件配置" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>命令行插件配置算是比较经典的配置手段了，在 Java 中可以使用 <code>-D</code> 参数配置系统属性。Maven 简单的重用了该参数，在检查插件的时候检查系统属性，实现了插件参数的配置。</p>
+<p>例如：<code>maven-compiler-plugin</code> 插件就提供了一个 <code>maven.test.skip</code>的系统属性，通过配置是否跳过测试。以下是该插件 <code>testCompile</code>目标的 skip 参数详细信息。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="shell" data-theme="github-light github-dark"><code data-language="shell" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> skip</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">      User</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> property:</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> maven.test.skip</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">      Set</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> this</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> to</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> 'true'</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> to</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> bypass</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> compilation</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> of</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> test</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> sources.</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> Its</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> use</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> is</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> NOT</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">      RECOMMENDED,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> but</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> quite</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> convenient</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> on</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> occasion.</span></span>
+<span data-line> </span></code></pre></figure>
+<p>可以看到该参数可以使用 <code>maven.test.skip</code>，因此可以编写命令 <code>maven install -Dmaven.test.skip=true</code> 用来跳过测试。</p>
+<h3 id="pom-插件配置">POM 插件配置<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#pom-插件配置" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>对于一些固定常用的参数，可以直接在 pom 文件中配置，使用 <code>configuration</code> 配置 参数，如下：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>org.apache.maven.plugins&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>maven-war-plugin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>3.3.1&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">configuration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">warSourceExcludes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>WEB-INF/classes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">warSourceExcludes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">configuration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">   &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>如果需要插件在不同声明周期执行相同的目标，但是执行的参数不一样，就需要另外配置。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugins</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">            &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>org.apache.maven.plugins&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>maven-compiler-plugin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>3.1&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">               	 &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">executions</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">execution</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>diy-compile&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">phase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>install&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">phase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goals</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                            &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>testCompile&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goals</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">configuration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                  					...</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                			  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">configuration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">execution</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                   </span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">execution</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>diy-test&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">phase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>verify&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">phase</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goals</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                            &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>testCompile&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">goals</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">configuration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                  					...</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                			  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">configuration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">execution</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">                &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">executions</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">            &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugins</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>如上同一插件的同一目标绑定了不同的声明周期阶段，具体的参数配置只需要在各自的 <code>configuration</code> 配置即可。</p>
+<h2 id="聚合与继承">聚合与继承<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#聚合与继承" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="聚合">聚合<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#聚合" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>为了方便使用命令管理多个模块，就需要用到**聚合。**例如：项目中有 A，B 两个模块，需要对两个项目都执行清理 操作，因此你需要跑到 A 模块下执行 <code>mvn clean</code>命令，然后再跑到 B 模块下执行相同的命令。模块较多的话就比较麻烦。</p>
+<p>使用聚合就可以解决上述问题。新建一个聚合模块，然后将聚合模块的打包方式修改成 pom，并使用标签 <code>modules</code>引入模块 A，B，然后对聚合模块操作即可。示例代码：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">packaging</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>pom&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">packaging</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">modules</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>A模块目录名称&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>B模块目录名称&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">modules</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>聚合模块可以与其他模块同级，同级只需要将 module 改为 <code>&lt;module>../A模块目录名称&lt;/module></code> ，特别注意的是聚合模块的打包方式一定要修改成pom。</p>
+<h3 id="继承">继承<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#继承" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>继承的出现是为了消除重复，Java 如此，Maven 中的 pom 也是如此。假如有 A，B两个模块都需要 <code>spring-core</code> 2.0 版本的依赖，正常的做法就是在两个模块中分别声明同一个 <code>spring-core</code> 依赖。</p>
+<p>使用继承消除重复配置，新建一个模块 <code>C</code>，修改打包方式为 pom (与聚合操作一致)，接着引入 <code>spring-core</code>依赖，即可。这时 A，B 模块只需要继承 C 的 pom 即可，代码如下。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">parent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>C 模块groupId&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>C 模块artifactId&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>C 模块version&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">relativePath</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>C 模块pom.xml路径（相对路径）&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">relativePath</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">parent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>引入 C 模块的坐标信息，并使用 <code>relativePath</code> 指向 C 模块的 pom 文件路径。Maven 会首先根据 <code>relativePath</code> 找 pom，找不到就去本地仓库找，如果不配置 realtivePath，那默认值是 <code>../pom.xml</code>，也就是说 Maven 默认父 模块在当前模块的上一层目录。</p>
+<p>在上面的例子中 A，B 模块可以不用声明 gruopId 和 version，这些信息都从 C 模块中继承过来了，如果子模块要使用自己的 groupId 和 version 直接显示的声明即可。</p>
+<h4 id="maven-可继承的-pom-元素">Maven 可继承的 POM 元素<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#maven-可继承的-pom-元素" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li>groupId 项目组 ID ，项目坐标的核心元素。</li>
+<li>version 项目版本，项目坐标的核心元素。</li>
+<li>description 项目的描述信息。</li>
+<li>organization 项目的组织信息。</li>
+<li>inceptionYear 项目的创始年份。</li>
+<li>url 项目的 url 地址。</li>
+<li>develoers 项目的开发者信息。</li>
+<li>contributors 项目的贡献者信息。</li>
+<li>distributionManagerment 项目的部署信息。</li>
+<li>issueManagement 缺陷跟踪系统信息。</li>
+<li>ciManagement 项目的持续继承信息。</li>
+<li>scm 项目的版本控制信息。</li>
+<li>mailingListserv 项目的邮件列表信息。</li>
+<li>properties 自定义的 Maven 属性。</li>
+<li>dependencies 项目的依赖配置。</li>
+<li>dependencyManagement 醒目的依赖管理配置。</li>
+<li>repositories 项目的仓库配置。</li>
+<li>build 包括项目的源码目录配置、输出目录配置、插件配置、插件管理配置等。</li>
+<li>reporting 包括项目的报告输出目录配置、报告插件配置等。</li>
+</ul>
+<h4 id="依赖管理">依赖管理<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#依赖管理" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>上面说到依赖可以继承，但是并不是每一个模块都需要引入父模块的依赖。例如一个工具模块，就不太需要 <code>spring</code>这些依赖包，但是因为继承关系，导致工具模块也引入了这些包，为了避免这种情况就需要使用新的元素 dependencyManagement。</p>
+<p>dependencyManagement 可以让子类自行的选择继承父模块的依赖，只需要将父模块的依赖用元素 <code>dependencyManagement</code>包裹起来即可。例如父模块依赖代码如下：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencyManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    </span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>org.springframework&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>spring-core&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>2.5.6&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    </span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">     &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>junit&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>junit&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>5.0&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">scope</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>test&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">scope</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    </span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencyManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>子模块引用父模块依赖，代码如下：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> </span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">     &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>junit&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>junit&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">   </span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>子模块 pom 直接引用所需要的依赖坐标即可，上面代码只引用了父模块的 junit 依赖，因此 spring-core 不会被引入。子模块还去掉了依赖的 version 和 scope 信息，这是因为继承了父模块的 pom，完整的依赖声明已经在父 pom 中了，因此子模块只需要 groupId 和 artifactId 就能获取对应的依赖信息，这样使用也能使所有子模块统一依赖版本，降低依赖冲突概率。</p>
+<p><strong>import 和 dependencyManagement</strong></p>
+<p>上面的章节说到过依赖范围 <code>import</code>，import 需要配合 dependencyManagement 使用。作用是将目标模块的 pom 中的 dependencyManagement 配置，导入并合并到当前模块的 pom 的 dependencyManagement 配置中。</p>
+<p>例如想要在另一个模块中使用父模块完全一样的 dependencyManagement 配置，需要在 pom 编写如下代码：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencyManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  </span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  	&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>父模块 groupId&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>父模块 artifactId&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>父模块 version&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">type</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>pom&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">type</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">scope</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>import&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">scope</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">dependencyManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<h4 id="插件管理">插件管理<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#插件管理" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>插件管理的思想和依赖管理一致。在父 pom 中使用 <code>pluginManagement</code> 包裹插件，即可达到与依赖管理一样的效果。</p>
+<p>子模块使用插件只需要声明 <code>groupid</code> 和 <code>artifactId</code>即可。若子模块需要修改插件的配置信息，只需要在模块中覆盖父类的配置即可。</p>
+<h3 id="继承和聚合关系">继承和聚合关系<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#继承和聚合关系" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>都要将打包方式改为 pom，一个模块可以既是聚合模块，又是父模块。</p>
+<h2 id="约定优于配置">约定优于配置<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#约定优于配置" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>我们都知道 Maven 项目的源代码文件夹是 src/main/java，编译输出文件夹是 target/classes/，这是 maven 的约定，我们只需要准守即可。当然想要自己改变这些约定也可以做到，但是不推荐。我们准守的这些约定实际上是 maven 的超级 pom 帮我们配置了这些信息。</p>
+<p>所有的 maven 项目都隐式地继承了超级 pom，这个超级 pom 配置了源代码目录路径，编译输出路径，测试代码路径等等，这些配置信息就是我们要准守的约定。超级 pom 可以到 maven 的安装目录下 <code>/lib/maven-model-builder-x.x.x.jar</code>文件（x.x.x 代表的是 maven 版本 ），解压之后找到 <code>org/apache/maven/pom-4.0.0.xml</code> 文件即可查看配置信息。这是我本机的超级 pom 的部分配置信息</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="xml" data-theme="github-light github-dark"><code data-language="xml" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">directory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.basedir}/target&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">directory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">outputDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.build.directory}/classes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">outputDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">finalName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.artifactId}-${project.version}&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">finalName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">testOutputDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.build.directory}/test-classes&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">testOutputDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">sourceDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.basedir}/src/main/java&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">sourceDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">scriptSourceDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.basedir}/src/main/scripts&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">scriptSourceDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">testSourceDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.basedir}/src/test/java&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">testSourceDirectory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">resources</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">resource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">directory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.basedir}/src/main/resources&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">directory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">resource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">resources</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">testResources</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">testResource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">directory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>${project.basedir}/src/test/resources&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">directory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">testResource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">testResources</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">pluginManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">      &lt;!-- NOTE: These plugins will be removed from future versions of the super POM --></span></span>
+<span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">      &lt;!-- They are kept for the moment as they are very unlikely to conflict with lifecycle mappings (MNG-4453) --></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugins</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">          &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>maven-antrun-plugin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">          &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>1.3&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">          &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>maven-assembly-plugin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">          &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>2.2-beta-5&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">          &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>maven-dependency-plugin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">          &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>2.8&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">          &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>maven-release-plugin&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">          &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>2.5.3&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">      &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">plugins</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">pluginManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<h2 id="反应堆">反应堆<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#反应堆" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>之前使用到聚合的知识，用一个聚合模块包含多个模块，只要对聚合模块操作即可影响到包含的模块。我们把包含的这一堆模块叫做**反应堆。**为啥叫反应堆呢，因为需要发生反应，在构建这些模块的时候肯定存在一个构建顺序，依次构建。</p>
+<p>例如聚合模块 A，按顺序包含模块 B，C，D。按照正常理解，对 A 模块进行构建时，我们会认为，B，C，D 会按照顺序依次构建，但实际的构建顺序却不一定是我们预期的那样。</p>
+<p>实际的构建顺序是这样的：<strong>Maven 先按照顺序读取 pom，如果 pom 没有依赖模块，那么就构建该模块，否则就构建其依赖模块，若依赖模块还依赖其他模块，则进一步构建依赖模块。</strong></p>
+<p>在实际开发中可以使用一些参数，来决定需要构建的模块，或者指定模块构建的顺序。假设模块 A，模块 B 都依赖于模块 C。</p>
+<ul>
+<li>-am， 同时构建所列模块的依赖模块。例如：<code>mvn clean install -pl A -am</code>，结果顺序：C ，A。</li>
+<li>-amd 同时构建依赖于所列模块的模块。例如：<code>mvn clean install -pl C -amd</code>，结果顺序：C，A，B</li>
+<li>-pl 构建指定的模块，模块间用逗号分隔。例如：<code>mvn clean install -pl A，B</code></li>
+<li>-rf  在完整的构建顺序基础上指定从哪个模块开始构建。例如：<code>mvn clean install -pl C -amd -rf B</code> 结果顺序：C，B，A</li>
+</ul></article></div><div class="right sidebar"><div class="graph"><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true}"></div></div></div><div class="backlinks"><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../Atlas/Blog-HomePage" class="internal">Blog HomePage</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.2.3</a> © 2024</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></body><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js" type="application/javascript"></script><script type="application/javascript">function c(){let t=this.parentElement;t.classList.toggle("is-collapsed");let l=t.classList.contains("is-collapsed")?this.scrollHeight:t.scrollHeight;t.style.maxHeight=l+"px";let o=t,e=t.parentElement;for(;e;){if(!e.classList.contains("callout"))return;let n=e.classList.contains("is-collapsed")?e.scrollHeight:e.scrollHeight+o.scrollHeight;e.style.maxHeight=n+"px",o=e,e=e.parentElement}}function i(){let t=document.getElementsByClassName("callout is-collapsible");for(let s of t){let l=s.firstElementChild;if(l){l.addEventListener("click",c),window.addCleanup(()=>l.removeEventListener("click",c));let e=s.classList.contains("is-collapsed")?l.scrollHeight:s.scrollHeight;s.style.maxHeight=e+"px"}}}document.addEventListener("nav",i);window.addEventListener("resize",i);
+</script><script type="module">
+          let mermaidImport = undefined
+          document.addEventListener('nav', async () => {
+            if (document.querySelector("code.mermaid")) {
+              mermaidImport ||= await import('https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs')
+              const mermaid = mermaidImport.default
+              const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+              mermaid.initialize({
+                startOnLoad: false,
+                securityLevel: 'loose',
+                theme: darkMode ? 'dark' : 'default'
+              })
+
+              await mermaid.run({
+                querySelector: '.mermaid'
+              })
+            }
+          });
+          </script><script type="application/javascript">
+            const socket = new WebSocket('ws://localhost:3001')
+            // reload(true) ensures resources like images and scripts are fetched again in firefox
+            socket.addEventListener('message', () => document.location.reload(true))
+          </script><script src="../../../../postscript.js" type="module"></script></html>
