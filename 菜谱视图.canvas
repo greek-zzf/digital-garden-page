@@ -1,0 +1,10 @@
+{
+	"nodes":[
+		{"id":"02104258ae4d6dc0","type":"text","text":"","x":1048,"y":-997,"width":250,"height":60},
+		{"type":"text","text":"","id":"be44189a8637f708","x":143,"y":-966,"width":250,"height":60},
+		{"type":"file","file":"Spaces/Areas/学做菜/主食类.md","id":"d5e6614b63c89230","x":-1220,"y":-200,"width":400,"height":400},
+		{"type":"file","file":"Spaces/Areas/学做菜/炒菜类.md","id":"24036dc2ffd14c9c","x":-820,"y":-200,"width":400,"height":800},
+		{"type":"file","file":"Spaces/Areas/学做菜/汤类.md","id":"268bd91fcde93476","x":-420,"y":-200,"width":400,"height":400}
+	],
+	"edges":[]
+}
